@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt br">
+<head>
+    <meta charset="UTF-8">
+    <meta-name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro do Cliente</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+<center>
+    <div class="box">
+        <h1>Bem Vindo ao Mercado Livre</h1>
+        <h2>Preencha os dados abaixo para criar sua conta e acessar todos os recursos da plataforma.</h2>
+
+        <label>Nome:</label><br>
+        <input type="text" id="nome"><br>
+
+        <label>Sobrenome:</label><br>
+        <input type="text" id="sobrenome"><br>
+
+        <label>CPF:</label><br>
+        <input type="text" id="cpf"><br>
+
+        <label>Email:</label><br>
+        <input type="email" id="email"><br>
+
+        <label>Senha:</label><br>
+        <input type="password" id="senha"><br>
+
+        <label>Rua:</label><br>
+        <input type="text" id="rua"><br>
+
+        <label>CEP:</label><br>
+        <input type="text" id="cep"><br>
+
+        <label>Cidade:</label><br>
+        <input type="text" id="cidade"><br>
+
+        <label>Estado:</label><br>
+        <input type="text" id="estado"><br>
+
+        <label>Telefone:</label><br>
+        <input type="text" id="telefone"><br><br>
+
+        <button onclick="cadastrar()">Cadastrar</button>
+
+        <p>
+            Já possui conta?
+            <a href="loginADM.html">Fazer login</a>
+        </p>
+    </div>
+</center>
+
+
+<script>
+function cadastrar() {
+    const pessoa = {
+        nome: document.getElementById("nome").value.trim(),
+        sobrenome: document.getElementById("sobrenome").value.trim(),
+        cpf: document.getElementById("cpf").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        senha: document.getElementById("senha").value.trim(),
+        rua: document.getElementById("rua").value.trim(),
+        cep: document.getElementById("cep").value.trim(),
+        cidade: document.getElementById("cidade").value.trim(),
+        estado: document.getElementById("estado").value.trim(),
+        telefone: document.getElementById("telefone").value.trim()
+    };
+
+    fetch("/pessoas", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(pessoa)
+    })
+    .then(r => {
+        if (r.ok) {
+            alert("Cadastro realizado com sucesso!");
+            location.href = "index.html";
+        } else {
+            alert("Erro ao cadastrar!");
+        }
+    });
+}
+</script>
+
+</body>
+</html>

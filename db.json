@@ -1,0 +1,44 @@
+{
+  "pessoas": [
+    {
+      "id": 1,
+      "nome": "Maria",
+      "sobrenome": "Gomes",
+      "cpf": "123.456.789-00",
+      "email": "Danger@gmail.com",
+      "senha": "2342342345423",
+      "rua": "Castro Alves",
+      "cep": "5346356434534",
+      "cidade": "Minas",
+      "estado": "RRS",
+      "telefone": "678697213435"
+    },
+    {
+      "id": 2,
+      "nome": "Pedro",
+      "sobrenome": "Alves",
+      "cpf": "111.222.333-44",
+      "idade": "30",
+      "email": "example@gmail.com",
+      "senha": "23422345423",
+      "rua": "Rua do Petista",
+      "cep": "Sei la",
+      "cidade": "Sei la tambem",
+      "estado": "RJ",
+      "telefone": "5467593265"
+    },
+    {
+      "id": 3,
+      "nome": "Mariana",
+      "sobrenome": "Candido",
+      "cpf": "34634534524",
+      "email": "gustavo.regor.wando@gmail.com",
+      "senha": "34563425235537",
+      "rua": "Rua Central, 789",
+      "cep": "60181-150",
+      "cidade": "Belo Horizonte",
+      "estado": "MG",
+      "telefone": "6346363483824"
+    }
+  ]
+}

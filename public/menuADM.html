@@ -1,0 +1,206 @@
+index.html
+<!DOCTYPE html>
+<html lang="pt br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD - GET / PUT / DELETE - MERCADO-LIVRE</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<center>
+    <h1>Menu do ADM</h1>
+
+    <!-- PUT -->
+    <h2>Atualizar Dados do Cliente</h2>
+
+    <label>ID:</label>
+    <input type="text" id="id" readonly><br>
+
+    <label>Nome:</label>
+    <input type="text" id="nomeAtualizar"><br>
+
+    <label>Sobrenome:</label>
+    <input type="text" id="sobrenomeAtualizar"><br>
+
+    <label>CPF:</label>
+    <input type="text" id="cpfAtualizar" placeholder="Digite o CPF para buscar"><br>
+
+    <label>Email:</label>
+    <input type="text" id="emailAtualizar"><br>
+
+    <label>Senha:</label>
+    <input type="text" id="senhaAtualizar"><br>
+
+    <label>Rua:</label>
+    <input type="text" id="ruaAtualizar"><br>
+
+    <label>CEP:</label>
+    <input type="text" id="cepAtualizar"><br>
+
+    <label>Cidade:</label>
+    <input type="text" id="cidadeAtualizar"><br>
+
+    <label>Estado:</label>
+    <input type="text" id="estadoAtualizar"><br>
+
+    <label>Telefone:</label>
+    <input type="text" id="telefoneAtualizar"><br>
+
+    <br>
+    <input type="button" onclick="buscarDados()" value="Buscar">
+    <input type="button" onclick="atualizarDados()" value="Atualizar">
+
+    <hr>
+
+    <!-- DELETE -->
+    <h2>Deletar dados do Cliente</h2>
+    <label>CPF:</label>
+    <input type="text" id="cpfDeletar">
+    <input type="button" onclick="deletarDados()" value="Deletar">
+
+    <hr>
+
+    <!-- GET -->
+    <h1>Dados dos Clientes</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Sobrenome</th>
+                <th>CPF</th>
+                <th>Email</th>
+                <th>Senha</th>
+                <th>Rua</th>
+                <th>CEP</th>
+                <th>Cidade</th>
+                <th>Estado</th>
+                <th>Telefone</th>
+            </tr>
+        </thead>
+        <tbody id="tabela-corpo"></tbody>
+    </table>
+
+<a href="index.html">Voltar</a>
+
+<script>
+
+    // Buscar para preencher PUT
+    function buscarDados() {
+        const cpf = document.getElementById("cpfAtualizar").value;
+
+        fetch("/pessoas")
+        .then(r => r.json())
+        .then(data => {
+            const pessoa = data.find(p => p.cpf === cpf);
+
+            if (!pessoa) {
+                alert("Pessoa não encontrada!");
+                return;
+            }
+
+            document.getElementById("id").value = pessoa.id;
+            document.getElementById("nomeAtualizar").value = pessoa.nome;
+            document.getElementById("sobrenomeAtualizar").value = pessoa.sobrenome;
+            document.getElementById("emailAtualizar").value = pessoa.email;
+            document.getElementById("senhaAtualizar").value = pessoa.senha;
+            document.getElementById("ruaAtualizar").value = pessoa.rua;
+            document.getElementById("cepAtualizar").value = pessoa.cep;
+            document.getElementById("cidadeAtualizar").value = pessoa.cidade;
+            document.getElementById("estadoAtualizar").value = pessoa.estado;
+            document.getElementById("telefoneAtualizar").value = pessoa.telefone;
+        });
+    }
+
+    // PUT
+    function atualizarDados() {
+        const id = document.getElementById("id").value;
+
+        const dadosAtualizados = {
+            nome: document.getElementById("nomeAtualizar").value,
+            sobrenome: document.getElementById("sobrenomeAtualizar").value,
+            cpf: document.getElementById("cpfAtualizar").value,
+            email: document.getElementById("emailAtualizar").value,
+            senha: document.getElementById("senhaAtualizar").value,
+            rua: document.getElementById("ruaAtualizar").value,
+            cep: document.getElementById("cepAtualizar").value,
+            cidade: document.getElementById("cidadeAtualizar").value,
+            estado: document.getElementById("estadoAtualizar").value,
+            telefone: document.getElementById("telefoneAtualizar").value
+        };
+
+        fetch(`/pessoas/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dadosAtualizados)
+        })
+        .then(r => r.json())
+        .then(() => {
+            alert("Dados atualizados!");
+        });
+    }
+
+    // DELETE
+   function deletarDados() {
+    // Pega o CPF do input e remove espaços e caracteres não numéricos
+    let cpfInput = document.getElementById("cpfDeletar").value.trim().replace(/\D/g, "");
+
+    fetch("/pessoas")
+    .then(r => r.json())
+    .then(data => {
+        // Encontra a pessoa, normalizando o CPF do banco
+        const pessoa = data.find(p => (p.cpf || "").replace(/\D/g, "") === cpfInput);
+
+        if (!pessoa) {
+            alert("CPF não encontrado!");
+            return;
+        }
+
+        // Deleta pelo ID
+        fetch(`/pessoas/${pessoa.id}`, { method: "DELETE" })
+        .then(() => {
+            alert("Registro deletado!");
+            location.reload();
+        })
+        .catch(err => {
+            console.error("Erro ao deletar:", err);
+            alert("Erro ao deletar registro!");
+        });
+    })
+    .catch(err => {
+        console.error("Erro ao buscar pessoas:", err);
+        alert("Erro ao buscar registros!");
+    });
+}
+
+    // GET Tabela
+    fetch("/pessoas")
+    .then(r => r.json())
+    .then(data => {
+        const tabela = document.getElementById("tabela-corpo");
+
+        data.forEach(p => {
+            tabela.innerHTML += `
+                <tr>
+                    <td>${p.id}</td>
+                    <td>${p.nome}</td>
+                    <td>${p.sobrenome}</td>
+                    <td>${p.cpf}</td>
+                    <td>${p.email}</td>
+                    <td>${p.senha}</td>
+                    <td>${p.rua}</td>
+                    <td>${p.cep}</td>
+                    <td>${p.cidade}</td>
+                    <td>${p.estado}</td>
+                    <td>${p.telefone}</td>
+                </tr>`;
+        });
+    });
+
+</script>
+
+</center>
+</body>
+</html>
